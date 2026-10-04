@@ -1,6 +1,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from peft import PeftModel
+from peft import PeftModel
 
 BASE = 'models/Qwen2.5-7B-Instruct'
 ADAPT = 'model_output'
@@ -13,6 +14,7 @@ model = AutoModelForCausalLM.from_pretrained(
                                            bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=torch.float16),
     device_map='auto')
 model = PeftModel.from_pretrained(model, ADAPT)
+model.config = model.config.to_json()
 model.eval()
 
 tests = ['ciao, come va?', 'cosa facciamo stasera?', 'hai visto la partita ieri?']
